@@ -1,7 +1,8 @@
-import 'package:flutter/services.dart';
-import 'package:eventify/eventify.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'dart:io' show Platform;
+
+import 'package:eventify/eventify.dart';
+import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class Razorpay {
   // Response codes from platform
@@ -38,14 +39,11 @@ class Razorpay {
     if (!validationResult['success']) {
       _handleResult({
         'type': _CODE_PAYMENT_ERROR,
-        'data': {
-          'code': INVALID_OPTIONS,
-          'message': validationResult['message']
-        }
+        'data': {'code': INVALID_OPTIONS, 'message': validationResult['message']}
       });
       return;
     }
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       _channel.invokeMethod('setPackageName', packageInfo.packageName);
     }
@@ -79,11 +77,10 @@ class Razorpay {
 
       default:
         eventName = 'error';
-        payload =
-            PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.');
+        payload = PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.');
     }
 
-    _eventEmitter.emit(eventName, null, payload);
+    _eventEmitter.emit(eventName, null, data);
   }
 
   /// Registers event listeners for payment events

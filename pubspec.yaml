@@ -10,9 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  eventify: ^1.0.0
-  fluttertoast: ^8.0.7
-  package_info_plus: ^1.4.3
+  eventify: ^1.0.1
+  fluttertoast: ^8.2.2
+  package_info_plus: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -24,6 +24,4 @@ flutter:
     platforms:
       android:
         package: com.razorpay.razorpay_flutter
-        pluginClass: RazorpayFlutterPlugin
-      ios:
         pluginClass: RazorpayFlutterPlugin
