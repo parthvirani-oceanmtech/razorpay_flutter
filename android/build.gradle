@@ -22,10 +22,13 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
+    buildToolsVersion "32.0.0"
+
 
     defaultConfig {
         minSdkVersion 19
+        targetSdkVersion 33
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -33,6 +36,6 @@ android {
     }
     dependencies {
         implementation fileTree(dir: 'libs', include: ['*.jar'])
-        api 'com.razorpay:checkout:1.6.19'
+        api 'com.razorpay:checkout:1.6.24'
     }
 }
