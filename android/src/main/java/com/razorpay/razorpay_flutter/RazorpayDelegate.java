@@ -43,7 +43,7 @@ public class RazorpayDelegate implements ActivityResultListener, ExternalWalletL
         this.activity = activity;
     }
 
-    void setPackageName(String packageName){
+    void setPackageName(String packageName) {
         this.packageName = packageName;
         Log.d("PackageName", packageName);
     }
@@ -53,15 +53,14 @@ public class RazorpayDelegate implements ActivityResultListener, ExternalWalletL
         this.pendingResult = result;
 
         JSONObject options = new JSONObject(arguments);
-        if (activity.getPackageName().equalsIgnoreCase(packageName)){
-            Log.d("PAYMENT", activity.getPackageName()+";;;"+packageName);
+        if (activity.getPackageName().equalsIgnoreCase(packageName)) {
+            Log.d("PAYMENT", activity.getPackageName() + ";;;" + packageName);
             Intent intent = new Intent(activity, CheckoutActivity.class);
             intent.putExtra("OPTIONS", options.toString());
             intent.putExtra("FRAMEWORK", "flutter");
 
             activity.startActivityForResult(intent, Checkout.RZP_REQUEST_CODE);
         }
-
 
     }
 
@@ -127,7 +126,6 @@ public class RazorpayDelegate implements ActivityResultListener, ExternalWalletL
                 e.printStackTrace();
             }
         }
-
 
         reply.put("data", data);
         sendReply(reply);
