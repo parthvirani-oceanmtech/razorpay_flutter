@@ -1,3 +1,15 @@
+## 1.3.5
+
+- Update package_info_plus to 4.0.0 to support 3.10.1 flutter version
+
+## 1.3.4
+
+- Removed jcenter for android due to deprecation
+
+## 1.3.3
+
+- Detailed error object added in the error response
+
 ## 1.3.2
 
 - Bug fixes and performance improvements

@@ -1,4 +1,5 @@
 import 'dart:io' show Platform;
+import 'package:razorpay_flutter/upi_turbo.dart';
 
 import 'package:eventify/eventify.dart';
 import 'package:flutter/services.dart';
@@ -24,12 +25,24 @@ class Razorpay {
   static const UNKNOWN_ERROR = 100;
 
   static const MethodChannel _channel = const MethodChannel('razorpay_flutter');
+  late UpiTurbo upiTurbo;
 
   // EventEmitter instance used for communication
   late EventEmitter _eventEmitter;
 
-  Razorpay() {
+  Razorpay(String key) {
     _eventEmitter = new EventEmitter();
+    _setKeyID(key);
+  }
+
+  Razorpay initUpiTurbo() {
+    upiTurbo = new UpiTurbo(_channel);
+    return this;
+  }
+
+  ///Set KeyId function
+  void _setKeyID(String keyID) async {
+    await _channel.invokeMethod('setKeyID', keyID);
   }
 
   /// Opens Razorpay checkout
@@ -77,7 +90,7 @@ class Razorpay {
 
       default:
         eventName = 'error';
-        payload = PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.');
+        payload = PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.', null);
     }
 
     _eventEmitter.emit(eventName, null, data);
@@ -109,10 +122,7 @@ class Razorpay {
   static Map<String, dynamic> _validateOptions(Map<String, dynamic> options) {
     var key = options['key'];
     if (key == null) {
-      return {
-        'success': false,
-        'message': 'Key is required. Please check if key is present in options.'
-      };
+      return {'success': false, 'message': 'Key is required. Please check if key is present in options.'};
     }
     return {'success': true};
   }
@@ -137,13 +147,22 @@ class PaymentSuccessResponse {
 class PaymentFailureResponse {
   int? code;
   String? message;
+  Map<dynamic, dynamic>? error;
 
-  PaymentFailureResponse(this.code, this.message);
+  PaymentFailureResponse(this.code, this.message, this.error);
 
   static PaymentFailureResponse fromMap(Map<dynamic, dynamic> map) {
     var code = map["code"] as int?;
     var message = map["message"] as String?;
-    return new PaymentFailureResponse(code, message);
+    var responseBody;
+
+    if (responseBody is Map<dynamic, dynamic>) {
+      return new PaymentFailureResponse(code, message, responseBody);
+    } else {
+      Map<dynamic, dynamic> errorMap = new Map<dynamic, dynamic>();
+      errorMap["reason"] = responseBody;
+      return new PaymentFailureResponse(code, message, responseBody);
+    }
   }
 }
 

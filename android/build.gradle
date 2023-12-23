@@ -3,8 +3,8 @@ version '1.1.4'
 
 buildscript {
     repositories {
+        mavenCentral()
         google()
-        jcenter()
     }
 
     dependencies {
@@ -14,8 +14,8 @@ buildscript {
 
 rootProject.allprojects {
     repositories {
+        mavenCentral()
         google()
-        jcenter()
     }
 }
 
@@ -27,8 +27,7 @@ android {
 
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 33
+        minSdkVersion 21
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -36,6 +35,7 @@ android {
     }
     dependencies {
         implementation fileTree(dir: 'libs', include: ['*.jar'])
-        api 'com.razorpay:checkout:1.6.24'
+        api 'com.razorpay:checkout:1.6.+'
+        implementation 'com.google.code.gson:gson:2.8.8'
     }
 }
