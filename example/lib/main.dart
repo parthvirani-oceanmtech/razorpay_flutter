@@ -1,8 +1,7 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
-import 'package:razorpay_flutter/model/upi_account.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:razorpay_flutter/model/Error.dart';
-import 'package:flutter/cupertino.dart';
 
 void main() {
   runApp(const MyApp());
@@ -211,11 +210,11 @@ class _MyHomePageState extends State<MyHomePage> {
   String orderIdValue = "";
   String mobileNumberValue = "8888888888";
 
-  late Razorpay razorpay ;
+  late Razorpay razorpay;
 
   @override
   void initState() {
-    razorpay = Razorpay("rzp_test_qRGYYA5wZrpFvJ").initUpiTurbo();
+    razorpay = Razorpay();
     super.initState();
   }
 
@@ -305,35 +304,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 hintText: 'Enter Mobile Number',
                 labelText: 'Mobile Number',
               ),
-              RZPButton(
-                widthSize: 200.0,
-                labelText: "Link New Upi Account",
-                onPressed: () {
-                  mobileNumberValue = mobileNumberController.text;
-
-                  razorpay.upiTurbo.linkNewUpiAccount(customerMobile: mobileNumberValue,
-                      color: "#ffffff",
-                      onSuccess: (List<UpiAccount> upiAccounts) {
-                        print("Successfully Onboarded Account : ${upiAccounts.length}");
-                      },
-                      onFailure:(Error error) { ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Error : ${error.errorDescription}")));}
-                  );
-                },
-              ),
-              RZPButton(
-                widthSize: 200.0,
-                labelText: "Manage Upi Account",
-                onPressed: () {
-                  mobileNumberValue = mobileNumberController.text;
-
-                  razorpay.upiTurbo.manageUpiAccounts(customerMobile: mobileNumberValue,
-                      color: "#ffffff",
-                      onFailure:(Error error) { ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Error : ${error.errorDescription}")));}
-                  );
-                },
-              ),
             ],
           ),
         ),
@@ -349,10 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
       'description': 'Fine T-Shirt',
       'retry': {'enabled': true, 'max_count': 1},
       'send_sms_hash': true,
-      'prefill': {
-        'contact': '$mobileNumberValue',
-        'email': 'test@razorpay.com'
-      },
+      'prefill': {'contact': '$mobileNumberValue', 'email': 'test@razorpay.com'},
       'external': {
         'wallets': ['paytm']
       }
@@ -363,41 +330,31 @@ class _MyHomePageState extends State<MyHomePage> {
     return {
       'amount': int.parse(amountValue),
       'currency': 'INR',
-      'prefill':{
-        'contact':'$mobileNumberValue',
-        'email':'test@razorpay.com'
-      },
-      'theme':{
-        'color':'#0CA72F'
-      },
-      'send_sms_hash':true,
-      'retry':{
-        'enabled':false,
-        'max_count':4
-      },
+      'prefill': {'contact': '$mobileNumberValue', 'email': 'test@razorpay.com'},
+      'theme': {'color': '#0CA72F'},
+      'send_sms_hash': true,
+      'retry': {'enabled': false, 'max_count': 4},
       'key': '$merchantKeyValue',
-      'order_id':'$orderIdValue',
+      'order_id': '$orderIdValue',
       'disable_redesign_v15': false,
-      'experiments.upi_turbo':true,
-      'ep':'https://api-web-turbo-upi.ext.dev.razorpay.in/test/checkout.html?branch=feat/turbo/tpv'
+      'experiments.upi_turbo': true,
+      'ep': 'https://api-web-turbo-upi.ext.dev.razorpay.in/test/checkout.html?branch=feat/turbo/tpv'
     };
   }
 
-
   //Handle Payment Responses
 
-  void handlePaymentErrorResponse(PaymentFailureResponse response){
-
+  void handlePaymentErrorResponse(PaymentFailureResponse response) {
     /** PaymentFailureResponse contains three values:
     * 1. Error Code
     * 2. Error Description
     * 3. Metadata
     **/
-    showAlertDialog(context, "Payment Failed", "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
+    showAlertDialog(context, "Payment Failed",
+        "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
   }
 
-  void handlePaymentSuccessResponse(PaymentSuccessResponse response){
-
+  void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
     /** Payment Success Response contains three values:
     * 1. Order ID
     * 2. Payment ID
@@ -406,16 +363,12 @@ class _MyHomePageState extends State<MyHomePage> {
     showAlertDialog(context, "Payment Successful", "Payment ID: ${response.paymentId}");
   }
 
-  void handleExternalWalletSelected(ExternalWalletResponse response){
+  void handleExternalWalletSelected(ExternalWalletResponse response) {
     showAlertDialog(context, "External Wallet Selected", "${response.walletName}");
   }
 
-  void showAlertDialog(BuildContext context, String title, String message){
+  void showAlertDialog(BuildContext context, String title, String message) {
     // set up the buttons
-    Widget continueButton = ElevatedButton(
-      child: const Text("Continue"),
-      onPressed:  () {},
-    );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text(title),
@@ -436,10 +389,7 @@ class RZPButton extends StatelessWidget {
   VoidCallback onPressed;
   double widthSize = 100.0;
 
-  RZPButton(
-      {required this.widthSize,
-      required this.labelText,
-      required this.onPressed});
+  RZPButton({required this.widthSize, required this.labelText, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -469,11 +419,7 @@ class RZPEditText extends StatelessWidget {
   TextInputType textInputType;
   TextEditingController controller;
 
-  RZPEditText(
-      {required this.textInputType,
-      required this.hintText,
-      required this.labelText,
-      required this.controller});
+  RZPEditText({required this.textInputType, required this.hintText, required this.labelText, required this.controller});
 
   @override
   Widget build(BuildContext context) {

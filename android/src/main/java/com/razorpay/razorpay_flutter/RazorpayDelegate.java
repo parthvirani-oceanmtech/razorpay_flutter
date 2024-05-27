@@ -45,11 +45,9 @@ public class RazorpayDelegate implements ActivityResultListener, ExternalWalletL
     private String packageName;
     private Checkout checkout;
     Gson gson ;
-    private UpiTurbo upiTurbo;
 
     public RazorpayDelegate(Activity activity) {
         this.activity = activity;
-        upiTurbo = new UpiTurbo(activity);
         this.gson = new Gson();
     }
 
@@ -184,21 +182,5 @@ public class RazorpayDelegate implements ActivityResultListener, ExternalWalletL
         sendReply(reply);
     }
 
-    public void setKeyID(String keyId,  Result result){
-        upiTurbo.setKeyID(keyId, result);
-    }
-
-    public void linkNewUpiAccount(String customerMobile, String color, Result result){
-        upiTurbo.linkNewUpiAccount(customerMobile, color, result);
-    }
-
-
-    public void manageUpiAccounts(String customerMobile, String color, Result result){
-        upiTurbo.manageUpiAccounts(customerMobile, color, result);
-    }
-
-    public  boolean isTurboPluginAvailable(Result result) {
-        return upiTurbo.isTurboPluginAvailable(result);
-    }
 
 }

@@ -2,7 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:eventify/eventify.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'dart:io' show Platform;
-import 'package:razorpay_flutter/upi_turbo.dart';
 
 class Razorpay {
   // Response codes from platform
@@ -24,24 +23,12 @@ class Razorpay {
   static const UNKNOWN_ERROR = 100;
 
   static const MethodChannel _channel = const MethodChannel('razorpay_flutter');
-  late UpiTurbo upiTurbo;
 
   // EventEmitter instance used for communication
   late EventEmitter _eventEmitter;
 
-  Razorpay(String key) {
+  Razorpay() {
     _eventEmitter = new EventEmitter();
-    _setKeyID(key);
-  }
-
-  Razorpay initUpiTurbo() {
-    upiTurbo = new UpiTurbo(_channel);
-    return this;
-  }
-
-  ///Set KeyId function
-  void _setKeyID(String keyID) async {
-    await _channel.invokeMethod('setKeyID', keyID);
   }
 
   /// Opens Razorpay checkout
@@ -55,8 +42,6 @@ class Razorpay {
       });
       return;
     }
-
-    _setKeyID(validationResult["key"]);
 
     if (Platform.isAndroid) {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
