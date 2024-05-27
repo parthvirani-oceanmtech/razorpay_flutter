@@ -78,27 +78,6 @@ public class RazorpayFlutterPlugin implements FlutterPlugin, MethodCallHandler, 
             case "resync":
                 razorpayDelegate.resync(result);
                 break;
-
-            case "setKeyID":
-                String key = call.arguments().toString();
-                razorpayDelegate.setKeyID(key,  result);
-                break;
-            case "linkNewUpiAccount":
-                _arguments = call.arguments();
-                customerMobile = (String) _arguments.get("customerMobile");
-                color = (String) _arguments.get("color");
-                razorpayDelegate.linkNewUpiAccount(customerMobile, color , result);
-                break;
-
-            case "manageUpiAccounts":
-                _arguments = call.arguments();
-                customerMobile = (String) _arguments.get("customerMobile");
-                color = (String) _arguments.get("color");
-                razorpayDelegate.manageUpiAccounts(customerMobile, color , result);
-                break;
-            case "isTurboPluginAvailable":
-                razorpayDelegate.isTurboPluginAvailable(result);
-                break;
             default:
                 result.notImplemented();
 
