@@ -55,6 +55,9 @@ class Razorpay {
       });
       return;
     }
+
+    _setKeyID(validationResult["key"]);
+
     if (Platform.isAndroid) {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       _channel.invokeMethod('setPackageName', packageInfo.packageName);
