@@ -34,12 +34,10 @@ class Razorpay {
     _setKeyID(key);
   }
 
-  Razorpay initUpiTurbo(){
-    upiTurbo = new UpiTurbo( _channel);
+  Razorpay initUpiTurbo() {
+    upiTurbo = new UpiTurbo(_channel);
     return this;
   }
-
-
 
   ///Set KeyId function
   void _setKeyID(String keyID) async {
@@ -53,10 +51,7 @@ class Razorpay {
     if (!validationResult['success']) {
       _handleResult({
         'type': _CODE_PAYMENT_ERROR,
-        'data': {
-          'code': INVALID_OPTIONS,
-          'message': validationResult['message']
-        }
+        'data': {'code': INVALID_OPTIONS, 'message': validationResult['message']}
       });
       return;
     }
@@ -94,8 +89,7 @@ class Razorpay {
 
       default:
         eventName = 'error';
-        payload = PaymentFailureResponse(
-            UNKNOWN_ERROR, 'An unknown error occurred.', null);
+        payload = PaymentFailureResponse(UNKNOWN_ERROR, 'An unknown error occurred.', null, data: {});
     }
 
     _eventEmitter.emit(eventName, null, payload);
@@ -127,10 +121,7 @@ class Razorpay {
   static Map<String, dynamic> _validateOptions(Map<String, dynamic> options) {
     var key = options['key'];
     if (key == null) {
-      return {
-        'success': false,
-        'message': 'Key is required. Please check if key is present in options.'
-      };
+      return {'success': false, 'message': 'Key is required. Please check if key is present in options.'};
     }
     return {'success': true};
   }
@@ -140,15 +131,16 @@ class PaymentSuccessResponse {
   String? paymentId;
   String? orderId;
   String? signature;
+  Map<dynamic, dynamic> data;
 
-  PaymentSuccessResponse(this.paymentId, this.orderId, this.signature);
+  PaymentSuccessResponse(this.paymentId, this.orderId, this.signature, {required this.data});
 
   static PaymentSuccessResponse fromMap(Map<dynamic, dynamic> map) {
     String? paymentId = map["razorpay_payment_id"];
     String? signature = map["razorpay_signature"];
     String? orderId = map["razorpay_order_id"];
 
-    return new PaymentSuccessResponse(paymentId, orderId, signature);
+    return new PaymentSuccessResponse(paymentId, orderId, signature, data: map);
   }
 }
 
@@ -156,8 +148,9 @@ class PaymentFailureResponse {
   int? code;
   String? message;
   Map<dynamic, dynamic>? error;
+  Map<dynamic, dynamic> data;
 
-  PaymentFailureResponse(this.code, this.message, this.error);
+  PaymentFailureResponse(this.code, this.message, this.error, {required this.data});
 
   static PaymentFailureResponse fromMap(Map<dynamic, dynamic> map) {
     var code = map["code"] as int?;
@@ -165,22 +158,23 @@ class PaymentFailureResponse {
     var responseBody;
 
     if (responseBody is Map<dynamic, dynamic>) {
-      return new PaymentFailureResponse(code, message, responseBody);
-    } else{
+      return new PaymentFailureResponse(code, message, responseBody, data: map);
+    } else {
       Map<dynamic, dynamic> errorMap = new Map<dynamic, dynamic>();
       errorMap["reason"] = responseBody;
-      return new PaymentFailureResponse(code, message, responseBody);
+      return new PaymentFailureResponse(code, message, responseBody, data: map);
     }
   }
 }
 
 class ExternalWalletResponse {
   String? walletName;
+  Map<dynamic, dynamic> data;
 
-  ExternalWalletResponse(this.walletName);
+  ExternalWalletResponse(this.walletName, {required this.data});
 
   static ExternalWalletResponse fromMap(Map<dynamic, dynamic> map) {
     var walletName = map["external_wallet"] as String?;
-    return new ExternalWalletResponse(walletName);
+    return new ExternalWalletResponse(walletName, data: map);
   }
 }
