@@ -406,7 +406,7 @@ class RZPButton extends StatelessWidget {
           ),
         ),
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.indigoAccent),
+          backgroundColor: WidgetStateProperty.all(Colors.indigoAccent),
         ),
       ),
     );
